@@ -1,5 +1,6 @@
 import {Box, Button, TextField} from "@mui/material";
 import {useState} from "react";
+import {useSigninMutation} from "@/store/authApi";
 
 export default function Index() {
 
@@ -8,6 +9,8 @@ export default function Index() {
 
     const [password, setPassword] = useState("");
     const [isPasswordError, setIsPasswordError] = useState("");
+
+    const[signin] = useSigninMutation();
 
     return <Box sx={{
         display : "flex",
@@ -50,7 +53,12 @@ export default function Index() {
                 onFocus={()=>{setIsPasswordError("")}}
                 helperText={isPasswordError}
             />
-            <Button variant={"outlined"} >Sign In</Button>
+            <Button variant={"outlined"} onClick={()=>{
+                if(!isEmailError && !isPasswordError)  {
+                    console.log(">>>>>>>>>>>>>>>", {email, password})
+                    signin({email, password})
+                }
+            }}>Sign In</Button>
         </Box>
     </Box>
 

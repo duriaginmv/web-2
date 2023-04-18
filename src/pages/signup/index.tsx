@@ -1,5 +1,6 @@
 import {Box, Button, TextField} from "@mui/material";
 import {useState} from "react";
+import {useSignupMutation} from "@/store/authApi";
 
 export default function Index() {
     const [username, setUsername] = useState("");
@@ -16,6 +17,8 @@ export default function Index() {
 
     const [repeatPassword, setRepeatPassword] = useState("");
     const [isRepeatPasswordError, setIsRepeatPasswordError] = useState("");
+
+    const [signup] = useSignupMutation();
 
     return <Box sx={{
         display : "flex",
@@ -90,14 +93,19 @@ export default function Index() {
                 label={"Repeat password"}
                 error={!!isRepeatPasswordError}
                 onBlur={() => {
-                    if (!(password == repeatPassword)) {
+                    if (!(password === repeatPassword)) {
                         setIsRepeatPasswordError("Passwords don't match")
                     }
                 }}
                 onFocus={()=>{setIsRepeatPasswordError("")}}
                 helperText={isRepeatPasswordError}
             />
-            <Button variant={"outlined"} >Sign Up</Button>
+            <Button variant={"outlined"} onClick={()=>{
+                if(!isUsernameError && repeatPassword === password && !isEmailError && !isNicknameError && !isPasswordError)  {
+                    console.log(">>>>>>>>>>>>>>>", {username, nickname, email, password})
+                    signup({username, nickname, email, password})
+                }
+            }}>Sign Up</Button>
         </Box>
     </Box>
 
